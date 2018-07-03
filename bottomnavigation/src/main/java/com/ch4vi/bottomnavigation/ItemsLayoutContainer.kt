@@ -1,4 +1,4 @@
-package com.econocom.bottomnavigationbar.custom
+package com.ch4vi.bottomnavigation
 
 import android.support.annotation.IdRes
 import android.view.View

@@ -1,4 +1,4 @@
-package com.econocom.bottomnavigationbar.custom.menu
+package com.ch4vi.bottomnavigation.menu
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -9,7 +9,7 @@ data class BottomNavigationItem(
   private val iconRes: Int,
   private val title: String
 ) {
-  private var color: Int = 0
+  var color: Int = 0
   var enabled: Boolean = true
 
   fun getIcon(context: Context): Drawable? {

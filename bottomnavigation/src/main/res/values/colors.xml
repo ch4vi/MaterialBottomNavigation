@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- default ripple color for shifting items -->
+  <color name="bbn_shifting_item_ripple_color">#33FFFFFF</color>
+
+  <!-- default ripple color for fixed items -->
+  <color name="bbn_fixed_item_ripple_color">#33000000</color>
+</resources>

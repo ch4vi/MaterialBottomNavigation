@@ -1,7 +1,7 @@
-package com.econocom.bottomnavigationbar.custom.menu
+package com.ch4vi.bottomnavigation.menu
 
 import android.support.annotation.IdRes
-import com.econocom.bottomnavigationbar.custom.BottomNavigation
+import com.ch4vi.bottomnavigation.BottomNavigation
 
 interface OnMenuItemSelectionListener {
   fun onMenuItemSelect(@IdRes itemId: Int, position: Int, fromUser: Boolean)
