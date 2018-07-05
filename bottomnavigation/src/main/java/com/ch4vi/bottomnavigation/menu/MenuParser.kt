@@ -19,7 +19,7 @@ class MenuParser {
     private var colorActive: Int,
     private var colorInactive: Int,
     private var colorDisabled: Int,
-    private val badgeColor: Int,
+    val badgeColor: Int,
     var tablet: Boolean = false,
     var forceFixed: Boolean,
     var itemAnimationDuration: Int
@@ -81,8 +81,8 @@ class MenuParser {
       return rippleColor
     }
 
-    fun getItemAt(index: Int): BottomNavigationItem {
-      return items[index]
+    fun getItemAtOrNull(index: Int): BottomNavigationItem? {
+      return items.getOrNull(index)
     }
 
     fun getItemsCount(): Int {
@@ -125,7 +125,7 @@ class MenuParser {
   private var menu: Menu? = null
   private var item: MenuItem? = null
 
-  private fun inflateMenu(context: Context, menuRes: Int): Menu? {
+  internal fun inflateMenu(context: Context, menuRes: Int): Menu? {
     val list = ArrayList<BottomNavigationItem>()
     val menuParser = MenuParser()
 
