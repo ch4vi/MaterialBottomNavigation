@@ -1,4 +1,4 @@
-package com.ch4vi.bottomnavigation
+package com.ch4vi.bottomnavigation.badge
 
 import android.graphics.Canvas
 import android.graphics.ColorFilter
@@ -7,7 +7,7 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
 
-class BadgeDrawable(private val color: Int, private val size: Int) : Drawable() {
+class BadgeDrawable(color: Int, private val size: Int) : Drawable() {
   private object Const {
     const val FADE_DURATION = 100f
     const val ALPHA_MAX = 255
@@ -16,6 +16,10 @@ class BadgeDrawable(private val color: Int, private val size: Int) : Drawable() 
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
   private var startTimeMillis: Long = 0
   var animating: Boolean = false
+
+  init {
+    paint.color = color
+  }
 
   override fun draw(canvas: Canvas?) {
     canvas ?: return

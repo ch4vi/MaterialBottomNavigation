@@ -1,9 +1,10 @@
-package com.econocom.bottomnavigationbar.custom
+package com.ch4vi.bottomnavigation.badge
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.annotation.IdRes
-import com.econocom.bottomnavigationbar.R
+import com.ch4vi.bottomnavigation.BottomNavigation
+import com.ch4vi.bottomnavigation.R
 import java.util.HashSet
 
 class BadgeProvider(private val navigation: BottomNavigation) {
@@ -11,10 +12,11 @@ class BadgeProvider(private val navigation: BottomNavigation) {
     const val KEY_MAP = "Map"
   }
 
-  private val badgeSize = navigation.context.resources.getDimensionPixelSize(R.dimen.bbn_badge_size)
+  private val badgeSize = navigation.context.resources.getDimensionPixelSize(
+      R.dimen.bbn_badge_size)
   private val map = HashSet<Int>()
 
-  private fun save(): Bundle {
+  internal fun save(): Bundle {
     val bundle = Bundle()
     bundle.putSerializable(Const.KEY_MAP, map)
     return bundle
@@ -38,7 +40,7 @@ class BadgeProvider(private val navigation: BottomNavigation) {
 
   internal fun getBadge(@IdRes itemId: Int): Drawable? {
     return if (map.contains(itemId)) {
-      newDrawable(navigation.menu.getBadgeColor())
+      navigation.menu?.let { newDrawable(it.badgeColor) }
     } else null
   }
 
@@ -66,6 +68,4 @@ class BadgeProvider(private val navigation: BottomNavigation) {
       navigation.invalidateBadge(itemId)
     }
   }
-
-
 }
