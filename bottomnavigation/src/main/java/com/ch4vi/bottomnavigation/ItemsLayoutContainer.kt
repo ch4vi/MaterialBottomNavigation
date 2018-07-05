@@ -23,6 +23,8 @@ interface ItemsLayoutContainer {
   fun requestLayout()
 
   fun setItemEnabled(index: Int, enabled: Boolean)
+
+  fun getChildAt(index: Int): View
 }
 
 interface OnItemClickListener {
