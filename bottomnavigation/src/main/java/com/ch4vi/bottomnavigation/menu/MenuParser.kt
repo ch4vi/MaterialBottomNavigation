@@ -21,8 +21,9 @@ class MenuParser {
     private var colorDisabled: Int,
     val badgeColor: Int,
     var tablet: Boolean = false,
-    var forceFixed: Boolean,
-    var itemAnimationDuration: Int
+    var shiftingDisabled: Boolean,
+    var itemAnimationDuration: Int,
+    var showLabelsIfFixed: Boolean
   ) {
     var shifting: Boolean = false
       private set
@@ -30,7 +31,7 @@ class MenuParser {
     var items: Array<BottomNavigationItem> = emptyArray()
       set(value) {
         field = value
-        this.shifting = items.size > 3 && !forceFixed
+        this.shifting = items.size > 3 && !shiftingDisabled
       }
 
     // region Getters
@@ -97,7 +98,7 @@ class MenuParser {
       return items[0].hasColor()
     }
 
-    // endregions
+    // endregion
 
     override fun toString(): String {
       return String.format(
@@ -105,7 +106,6 @@ class MenuParser {
           background, colorActive, colorInactive, colorDisabled, shifting, tablet
       )
     }
-
   }
 
   class MenuItem(
@@ -217,11 +217,13 @@ class MenuParser {
           typedArray.getColor(R.styleable.BottomNavigationMenu_bbn_itemColorDisabled, 0),
           badgeColor =
           typedArray.getColor(R.styleable.BottomNavigationMenu_bbn_badgeColor, Color.RED),
-          forceFixed =
-          typedArray.getBoolean(R.styleable.BottomNavigationMenu_bbn_alwaysShowLabels, false),
+          shiftingDisabled =
+          typedArray.getBoolean(R.styleable.BottomNavigationMenu_bbn_shiftingDisabled, false),
           itemAnimationDuration =
           typedArray.getInt(R.styleable.BottomNavigationMenu_bbn_itemAnimationDuration,
-              context.resources.getInteger(R.integer.bbn_item_animation_duration))
+              context.resources.getInteger(R.integer.bbn_item_animation_duration)),
+          showLabelsIfFixed =
+          typedArray.getBoolean(R.styleable.BottomNavigationMenu_bbn_showLabelsIfFixed, true)
       )
     }
     typedArray?.recycle()

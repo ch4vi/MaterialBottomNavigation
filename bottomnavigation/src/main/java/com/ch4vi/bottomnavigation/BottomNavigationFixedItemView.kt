@@ -29,14 +29,17 @@ class BottomNavigationFixedItemView(
       resources.getDimensionPixelSize(R.dimen.bbn_fixed_item_padding_horizontal)
   private val textSizeInactive =
       resources.getDimensionPixelSize(R.dimen.bbn_fixed_text_size_inactive)
+  private val paddingBottomInactive =
+      resources.getDimensionPixelSize(R.dimen.bbn_shifting_item_padding_bottom_inactive)
 
   private val interpolator = DecelerateInterpolator()
   private val animationDuration = menu.itemAnimationDuration.toLong()
   private val colorActive = menu.getColorActive()
   private val colorInactive = menu.getColorInactive()
   private val colorDisabled = menu.getColorDisabled()
+  private val showLabels = menu.showLabelsIfFixed
 
-  private var centerY = paddingTopActive
+  private var centerY = if (showLabels) paddingTopActive else paddingBottomInactive
     set(value) {
       field = value
       ViewCompat.postInvalidateOnAnimation(this)
@@ -145,17 +148,18 @@ class BottomNavigationFixedItemView(
     canvas.save()
     canvas.scale(canvasTextScale, canvasTextScale, textCenterX.toFloat(), textCenterY.toFloat())
 
-    item?.let {
-      canvas.drawText(
-          it.title,
-          textX,
-          textY,
-          textPaint
-      )
+    if (showLabels) {
+      item?.let {
+        canvas.drawText(
+            it.title,
+            textX,
+            textY,
+            textPaint
+        )
+      }
     }
 
     canvas.restore()
-
   }
 
   private fun measureText() {
