@@ -139,8 +139,7 @@ class BottomNavigation @JvmOverloads constructor(
   /**
    * Optional typeface used for the items' text labels
    */
-  // TODO internal
-   var typeface: SoftReference<Typeface> = SoftReference(Typeface.DEFAULT)
+  internal var typeface: SoftReference<Typeface> = SoftReference(Typeface.DEFAULT)
 
   /**
    * Current BottomBehavior assigned from the CoordinatorLayout
