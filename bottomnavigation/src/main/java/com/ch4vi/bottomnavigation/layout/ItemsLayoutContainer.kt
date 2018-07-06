@@ -1,4 +1,4 @@
-package com.ch4vi.bottomnavigation
+package com.ch4vi.bottomnavigation.layout
 
 import android.support.annotation.IdRes
 import android.view.View
@@ -6,15 +6,14 @@ import android.view.ViewGroup
 import com.ch4vi.bottomnavigation.menu.MenuParser
 
 interface ItemsLayoutContainer {
-  fun setSelectedIndex(index: Int, animate: Boolean)
+  var selectedIndex: Int
+  var listener: OnItemClickListener?
 
-  fun getSelectedIndex(): Int
+  fun setSelectedIndex(index: Int, animate: Boolean)
 
   fun populate(menu: MenuParser.Menu)
 
   fun setLayoutParams(params: ViewGroup.LayoutParams)
-
-  fun setOnItemClickListener(listener: OnItemClickListener)
 
   fun findById(@IdRes id: Int): View
 
@@ -24,7 +23,7 @@ interface ItemsLayoutContainer {
 
   fun setItemEnabled(index: Int, enabled: Boolean)
 
-  fun getChildAt(index: Int): View
+  fun asViewGroup(): ViewGroup
 }
 
 interface OnItemClickListener {
