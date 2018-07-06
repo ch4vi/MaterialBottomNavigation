@@ -12,12 +12,12 @@ abstract class VerticalScrollingBehavior<V : View> @JvmOverloads constructor(
   attrs: AttributeSet? = null
 ) : CoordinatorLayout.Behavior<V>(context, attrs) {
 
-  private var mTotalDyUnconsumed = 0
-  private var mTotalDy = 0
+  private var totalDyUnconsumed = 0
+  private var totalDy = 0
   @ScrollDirection
-  private var mOverScrollDirection = SCROLL_NONE
+  private var overScrollDirection = SCROLL_NONE
   @ScrollDirection
-  private var mScrollDirection = SCROLL_NONE
+  private var scrollDirection = SCROLL_NONE
 
   companion object {
 
@@ -35,7 +35,7 @@ abstract class VerticalScrollingBehavior<V : View> @JvmOverloads constructor(
    */
   @ScrollDirection
   fun getOverScrollDirection(): Int {
-    return mOverScrollDirection
+    return overScrollDirection
   }
 
   /**
@@ -44,7 +44,7 @@ abstract class VerticalScrollingBehavior<V : View> @JvmOverloads constructor(
 
   @ScrollDirection
   fun getScrollDirection(): Int {
-    return mScrollDirection
+    return scrollDirection
   }
 
   /**
@@ -84,16 +84,16 @@ abstract class VerticalScrollingBehavior<V : View> @JvmOverloads constructor(
   ) {
     super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed,
         dyUnconsumed, type)
-    if (dyUnconsumed > 0 && mTotalDyUnconsumed < 0) {
-      mTotalDyUnconsumed = 0
-      mOverScrollDirection = SCROLL_DIRECTION_UP
-    } else if (dyUnconsumed < 0 && mTotalDyUnconsumed > 0) {
-      mTotalDyUnconsumed = 0
-      mOverScrollDirection = SCROLL_DIRECTION_DOWN
+    if (dyUnconsumed > 0 && totalDyUnconsumed < 0) {
+      totalDyUnconsumed = 0
+      overScrollDirection = SCROLL_DIRECTION_UP
+    } else if (dyUnconsumed < 0 && totalDyUnconsumed > 0) {
+      totalDyUnconsumed = 0
+      overScrollDirection = SCROLL_DIRECTION_DOWN
     }
-    mTotalDyUnconsumed += dyUnconsumed
-    onNestedVerticalOverScroll(coordinatorLayout, child, mOverScrollDirection, dyConsumed,
-        mTotalDyUnconsumed)
+    totalDyUnconsumed += dyUnconsumed
+    onNestedVerticalOverScroll(coordinatorLayout, child, overScrollDirection, dyConsumed,
+        totalDyUnconsumed)
   }
 
   override fun onNestedPreScroll(
@@ -101,16 +101,16 @@ abstract class VerticalScrollingBehavior<V : View> @JvmOverloads constructor(
     target: View, dx: Int, dy: Int, consumed: IntArray, type: Int
   ) {
     super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
-    if (dy > 0 && mTotalDy < 0) {
-      mTotalDy = 0
-      mScrollDirection = SCROLL_DIRECTION_UP
-    } else if (dy < 0 && mTotalDy > 0) {
-      mTotalDy = 0
-      mScrollDirection = SCROLL_DIRECTION_DOWN
+    if (dy > 0 && totalDy < 0) {
+      totalDy = 0
+      scrollDirection = SCROLL_DIRECTION_UP
+    } else if (dy < 0 && totalDy > 0) {
+      totalDy = 0
+      scrollDirection = SCROLL_DIRECTION_DOWN
     }
-    mTotalDy += dy
+    totalDy += dy
     onDirectionNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed,
-        mScrollDirection)
+        scrollDirection)
   }
 
   override fun onNestedFling(
@@ -118,10 +118,10 @@ abstract class VerticalScrollingBehavior<V : View> @JvmOverloads constructor(
     target: View, velocityX: Float, velocityY: Float, consumed: Boolean
   ): Boolean {
     super.onNestedFling(coordinatorLayout, child, target, velocityX, velocityY, consumed)
-    mScrollDirection =
+    scrollDirection =
         if (velocityY > 0) SCROLL_DIRECTION_UP else SCROLL_DIRECTION_DOWN
     return onNestedDirectionFling(coordinatorLayout, child, target, velocityX, velocityY,
-        mScrollDirection)
+        scrollDirection)
   }
 
   protected abstract fun onNestedDirectionFling(

@@ -52,9 +52,7 @@ abstract class BottomNavigationItemView(
 
   override fun invalidateDrawable(drawable: Drawable) {
     super.invalidateDrawable(drawable)
-    if (drawable === badge) {
-      invalidate()
-    }
+    if (drawable === badge) invalidate()
   }
 
   fun invalidateBadge() {

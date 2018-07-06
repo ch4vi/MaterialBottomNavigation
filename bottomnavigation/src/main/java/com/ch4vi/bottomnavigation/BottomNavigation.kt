@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.ch4vi.bottomnavigation
 
 import android.annotation.SuppressLint
@@ -33,10 +35,13 @@ import com.ch4vi.bottomnavigation.layout.OnItemClickListener
 import com.ch4vi.bottomnavigation.layout.ShiftingLayout
 import com.ch4vi.bottomnavigation.layout.TabletLayout
 import com.ch4vi.bottomnavigation.menu.MenuParser
-import com.ch4vi.bottomnavigation.menu.OnMenuChangedListener
-import com.ch4vi.bottomnavigation.menu.OnMenuItemSelectionListener
 import java.lang.ref.SoftReference
 import com.ch4vi.bottomnavigation.layout.OnLayoutChangeListener as LayoutChangeListener
+
+interface OnMenuItemClickListener {
+  fun onMenuItemSelect(@IdRes itemId: Int, position: Int, fromUser: Boolean)
+  fun onMenuItemReselect(@IdRes itemId: Int, position: Int, fromUser: Boolean)
+}
 
 class BottomNavigation @JvmOverloads constructor(
   context: Context,
@@ -44,7 +49,6 @@ class BottomNavigation @JvmOverloads constructor(
   defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr),
     OnItemClickListener {
-  private val tag = BottomNavigation::class.java.simpleName
 
   object Const {
     const val PENDING_ACTION_NONE = 0x0
@@ -58,7 +62,7 @@ class BottomNavigation @JvmOverloads constructor(
   /**
    * Current pending action (used inside the BottomBehavior instance)
    */
-  var mPendingAction = Const.PENDING_ACTION_NONE
+  var pendingAction = Const.PENDING_ACTION_NONE
     private set
 
   /**
@@ -144,17 +148,17 @@ class BottomNavigation @JvmOverloads constructor(
   /**
    * Current BottomBehavior assigned from the CoordinatorLayout
    */
-  private var mBehavior: CoordinatorLayout.Behavior<*>? = null
+  private var behavior: CoordinatorLayout.Behavior<*>? = null
 
   /**
-   * Menu selection listener
+   * Menu selection itemClickListener
    */
-  var listener: OnMenuItemSelectionListener? = null
+  var itemClickListener: OnMenuItemClickListener? = null
 
   /**
-   * Menu changed listener
+   * Menu changed itemClickListener
    */
-  var menuChangedListener: OnMenuChangedListener? = null
+  var menuChangedListener: ((parent: BottomNavigation) -> Unit)? = null
 
   /**
    * The user defined layout_gravity
@@ -168,7 +172,7 @@ class BottomNavigation @JvmOverloads constructor(
 
   val badgeProvider: BadgeProvider
 
-  private val mLayoutChangedListener: LayoutChangeListener
+  private val layoutChangedListener: LayoutChangeListener
 
   // endregion
 
@@ -220,7 +224,7 @@ class BottomNavigation @JvmOverloads constructor(
     rippleOverlay.isFocusableInTouchMode = false
     addView(rippleOverlay)
 
-    mLayoutChangedListener = LayoutChangeListener(this)
+    layoutChangedListener = LayoutChangeListener(this)
   }
 
   // endregion
@@ -290,14 +294,14 @@ class BottomNavigation @JvmOverloads constructor(
       return
     }
 
-    mLayoutChangedListener.forceLayout(view)
+    layoutChangedListener.forceLayout(view)
     rippleOverlay.isHovered = true
     if (enabledRippleBackground) rippleOverlay.isPressed = true
   }
 
   override fun onItemClick(parent: ItemsLayoutContainer, view: View, index: Int, animate: Boolean) {
     setSelectedItemInternal(parent, view, index, animate, true)
-    mLayoutChangedListener.forceLayout(view)
+    layoutChangedListener.forceLayout(view)
   }
 
   override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -359,11 +363,11 @@ class BottomNavigation @JvmOverloads constructor(
       pendingMenu = null
     }
 
-    if (mBehavior == null) {
+    if (behavior == null) {
       layoutParams?.let {
-        mBehavior = layoutParams.behavior
+        behavior = layoutParams.behavior
         if (isInEditMode) return
-        mBehavior?.let {
+        behavior?.let {
           if (it is BottomBehavior) it.setLayoutValues(defaultHeight, bottomInset)
           else if (it is TabletBehavior) {
             val translucentStatus = context.getActivity()?.hasTranslucentStatusBar() ?: false
@@ -395,15 +399,14 @@ class BottomNavigation @JvmOverloads constructor(
   }
 
   fun setExpanded(expanded: Boolean, animate: Boolean) {
-    Log.i(tag, String.format("setExpanded(%b, %b)", expanded, animate))
-    mPendingAction =
+    pendingAction =
         (if (expanded) Const.PENDING_ACTION_EXPANDED else Const.PENDING_ACTION_COLLAPSED) or
         (if (animate) Const.PENDING_ACTION_ANIMATE_ENABLED else 0)
     requestLayout()
   }
 
   fun isExpanded(): Boolean {
-    mBehavior.let {
+    behavior.let {
       it ?: return false
       return (it as? BottomBehavior)?.isExpanded() ?: false
     }
@@ -458,18 +461,16 @@ class BottomNavigation @JvmOverloads constructor(
   }
 
   fun getBehavior(): CoordinatorLayout.Behavior<*>? {
-    if (mBehavior == null) {
+    if (behavior == null) {
       (layoutParams as? CoordinatorLayout.LayoutParams)?.let {
         return it.behavior
       }
     }
-    return mBehavior
+    return behavior
   }
 
   fun invalidateBadge(itemId: Int) {
-    (itemsContainer?.findById(itemId) as? BottomNavigationItemView)?.let {
-      it.invalidateBadge()
-    }
+    (itemsContainer?.findById(itemId) as? BottomNavigationItemView)?.invalidateBadge()
   }
 
   // endregion
@@ -477,7 +478,7 @@ class BottomNavigation @JvmOverloads constructor(
   // region Config
 
   internal fun resetPendingAction() {
-    mPendingAction = Const.PENDING_ACTION_NONE
+    pendingAction = Const.PENDING_ACTION_NONE
   }
 
   @SuppressLint("RtlHardcoded")
@@ -527,10 +528,10 @@ class BottomNavigation @JvmOverloads constructor(
             )
           }
         }
-        listener?.onMenuItemSelect(it.id, index, fromUser)
+        itemClickListener?.onMenuItemSelect(it.id, index, fromUser)
       }
     } else {
-      listener?.onMenuItemReselect(item?.id ?: -1, index, fromUser)
+      itemClickListener?.onMenuItemReselect(item?.id ?: -1, index, fromUser)
     }
   }
 
@@ -547,7 +548,7 @@ class BottomNavigation @JvmOverloads constructor(
       initializeContainer(menu)
       initializeItems(menu)
 
-      menuChangedListener?.onMenuChanged(this)
+      menuChangedListener?.invoke(this)
     }
     requestLayout()
   }
@@ -559,8 +560,8 @@ class BottomNavigation @JvmOverloads constructor(
 
   private fun initializeContainer(menu: MenuParser.Menu) {
     itemsContainer?.let {
-      // remove the layout listener
-      it.asViewGroup().removeOnLayoutChangeListener(mLayoutChangedListener)
+      // remove the layout itemClickListener
+      it.asViewGroup().removeOnLayoutChangeListener(layoutChangedListener)
 
       if (menu.tablet && it !is TabletLayout) {
         removeView(it.asViewGroup())
@@ -593,8 +594,8 @@ class BottomNavigation @JvmOverloads constructor(
       }
     }
 
-    // add the layout listener
-    itemsContainer?.asViewGroup()?.addOnLayoutChangeListener(mLayoutChangedListener)
+    // add the layout itemClickListener
+    itemsContainer?.asViewGroup()?.addOnLayoutChangeListener(layoutChangedListener)
   }
 
   private fun initializeItems(menu: MenuParser.Menu) {

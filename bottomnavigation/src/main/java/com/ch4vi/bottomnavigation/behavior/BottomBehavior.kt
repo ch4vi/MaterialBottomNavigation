@@ -127,7 +127,7 @@ class BottomBehavior(
   ): Boolean {
     val handled = super.onLayoutChild(parent, child, layoutDirection)
 
-    val pendingAction = child.mPendingAction
+    val pendingAction = child.pendingAction
     if (pendingAction != PENDING_ACTION_NONE) {
       val animate = pendingAction and PENDING_ACTION_ANIMATE_ENABLED != 0
       if (pendingAction and PENDING_ACTION_COLLAPSED != 0) {

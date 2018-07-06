@@ -19,7 +19,6 @@ class ShiftingLayout(context: Context) : ViewGroup(context), ItemsLayoutContaine
   private object Const {
     const val ROUND_DECIMALS = 10.0
     const val RATIO_MIN_INCREASE = 0.05f
-
   }
 
   private val maxActiveItemWidth: Int

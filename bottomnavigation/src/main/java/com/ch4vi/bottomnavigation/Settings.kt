@@ -31,7 +31,6 @@ class Settings(activity: Activity) {
 
     const val TRUE = "0"
     const val FALSE = "1"
-
   }
 
   private var flagIsNavBarOverride: String? = null
