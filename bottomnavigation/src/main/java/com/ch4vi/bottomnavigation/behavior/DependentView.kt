@@ -40,7 +40,7 @@ internal class SnackBarDependentView internal constructor(
 ) : DependentView<SnackbarLayout>(child, height, bottomInset) {
   private var snackbarHeight = -1
 
-  internal override fun onDependentViewChanged(
+  override fun onDependentViewChanged(
     parent: CoordinatorLayout,
     navigation: BottomNavigation
   ): Boolean {
