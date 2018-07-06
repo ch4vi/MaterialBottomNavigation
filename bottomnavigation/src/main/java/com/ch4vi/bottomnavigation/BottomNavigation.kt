@@ -139,7 +139,8 @@ class BottomNavigation @JvmOverloads constructor(
   /**
    * Optional typeface used for the items' text labels
    */
-  internal var typeface: SoftReference<Typeface> = SoftReference(Typeface.DEFAULT)
+  // TODO internal
+   var typeface: SoftReference<Typeface> = SoftReference(Typeface.DEFAULT)
 
   /**
    * Current BottomBehavior assigned from the CoordinatorLayout
@@ -220,7 +221,7 @@ class BottomNavigation @JvmOverloads constructor(
     rippleOverlay.isFocusableInTouchMode = false
     addView(rippleOverlay)
 
-    mLayoutChangedListener = com.ch4vi.bottomnavigation.layout.OnLayoutChangeListener(this)
+    mLayoutChangedListener = LayoutChangeListener(this)
   }
 
   // endregion
@@ -234,7 +235,7 @@ class BottomNavigation @JvmOverloads constructor(
     if (null == menu) savedState.selectedIndex = 0
     else savedState.selectedIndex = getSelectedIndex()
 
-    badgeProvider?.let { savedState.badgeBundle = it.save() }
+    badgeProvider.let { savedState.badgeBundle = it.save() }
 
     return savedState
   }
@@ -243,7 +244,7 @@ class BottomNavigation @JvmOverloads constructor(
     (state as? SavedState)?.let {
       super.onRestoreInstanceState(it.superState)
       defaultSelectedIndex = it.selectedIndex
-      it.badgeBundle?.let { badgeProvider?.restore(it) }
+      it.badgeBundle?.let { badgeProvider.restore(it) }
     }
   }
 

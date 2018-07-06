@@ -117,7 +117,6 @@ class MenuParser {
   )
 
   private object Tag {
-    const val NAME = "name"
     const val ITEM = "item"
     const val MENU = "menu"
   }
@@ -141,7 +140,7 @@ class MenuParser {
       do {
         if (eventType == XmlPullParser.START_TAG) {
           tagName = parser.name
-          if (tagName == Tag.NAME) {
+          if (tagName == Tag.MENU) {
             menuParser.readMenu(context, attrs)
             eventType = parser.next()
             break
@@ -159,7 +158,7 @@ class MenuParser {
             if (!lookingForEndOfUnknownTag) {
               tagName = parser.name
               if (tagName == Tag.ITEM) {
-                menuParser.readItem(context, attrs)
+                item = menuParser.readItem(context, attrs)
               } else {
                 lookingForEndOfUnknownTag = true
                 unknownTagName = tagName
@@ -174,11 +173,11 @@ class MenuParser {
               unknownTagName = null
             } else if (tagName == Tag.ITEM) {
               item?.let {
-                item = null
                 val tab = BottomNavigationItem(it.id, it.iconResId, "${it.title}")
                 tab.enabled = it.enabled
                 tab.color = it.color
                 list.add(tab)
+                item = null
               }
             } else if (tagName == Tag.MENU) {
               reachedEndOfMenu = true
@@ -196,12 +195,11 @@ class MenuParser {
       return null
     }
 
+    menu = menuParser.menu
     menu?.let {
-      menu = null
       it.items = list.toTypedArray()
-      return it
     }
-    return null
+    return menu
   }
 
   private fun readMenu(context: Context, attrs: AttributeSet) {
@@ -232,8 +230,9 @@ class MenuParser {
   /**
    * Called when the parser is pointing to an item tag.
    */
-  private fun readItem(context: Context, attrs: AttributeSet) {
+  private fun readItem(context: Context, attrs: AttributeSet): MenuItem? {
     val typedArray = context.obtainStyledAttributes(attrs, R.styleable.BottomNavigationMenuItem)
+    var item: MenuItem? = null
     typedArray?.let {
       item = MenuItem(
           id = typedArray.getResourceId(R.styleable.BottomNavigationMenuItem_android_id, 0),
@@ -247,5 +246,6 @@ class MenuParser {
       )
     }
     typedArray.recycle()
+    return item
   }
 }

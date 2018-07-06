@@ -1,6 +1,5 @@
 package com.ch4vi.bottomnavigation
 
-import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.graphics.Canvas
 import android.graphics.Color

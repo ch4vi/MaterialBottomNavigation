@@ -140,12 +140,11 @@ class ShiftingLayout(context: Context) : ViewGroup(context), ItemsLayoutContaine
       var itemWidthMax: Int
 
       if (totalWidth > screenWidth) {
-        val wRatio = screenWidth / totalWidth
-        val ratio = (Math.round(
-            wRatio * Const.ROUND_DECIMALS) / Const.ROUND_DECIMALS) + Const.RATIO_MIN_INCREASE
+        var ratio = screenWidth.toFloat() / totalWidth
+        ratio = (Math.round(ratio * Const.ROUND_DECIMALS).toDouble() / Const.ROUND_DECIMALS).toFloat() +
+            Const.RATIO_MIN_INCREASE
 
-        itemWidthMin =
-            Math.max(maxInactiveItemWidth * ratio, minInactiveItemWidth.toDouble()).toInt()
+        itemWidthMin = Math.max(maxInactiveItemWidth * ratio, minInactiveItemWidth.toFloat()).toInt()
         itemWidthMax = (maxActiveItemWidth * ratio).toInt()
 
 
