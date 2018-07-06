@@ -7,7 +7,7 @@ import android.support.v7.content.res.AppCompatResources
 data class BottomNavigationItem(
   val id: Int,
   private val iconRes: Int,
-  private val title: String
+  val title: String
 ) {
   var color: Int = 0
   var enabled: Boolean = true
