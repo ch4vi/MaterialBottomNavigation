@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     app:bbn_badgeColor="#FFCC0000"
+    app:bbn_badgePosition="top_left"
     app:bbn_itemColorActive="#00badf"
     app:bbn_itemColorInactive="#bbbacd"
     app:bbn_rippleColor="#aabbbacd"

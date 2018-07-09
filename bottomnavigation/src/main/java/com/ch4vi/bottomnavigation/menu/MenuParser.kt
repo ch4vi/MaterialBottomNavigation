@@ -20,6 +20,7 @@ class MenuParser {
     private var colorInactive: Int,
     private var colorDisabled: Int,
     val badgeColor: Int,
+    val badgePosition: Int,
     var tablet: Boolean = false,
     var shiftingDisabled: Boolean,
     var itemAnimationDuration: Int,
@@ -217,6 +218,7 @@ class MenuParser {
           typedArray.getColor(R.styleable.BottomNavigationMenu_bbn_itemColorDisabled, 0),
           badgeColor =
           typedArray.getColor(R.styleable.BottomNavigationMenu_bbn_badgeColor, Color.RED),
+          badgePosition = typedArray.getInt(R.styleable.BottomNavigationMenu_bbn_badgePosition, 0),
           shiftingDisabled =
           typedArray.getBoolean(R.styleable.BottomNavigationMenu_bbn_shiftingDisabled, false),
           itemAnimationDuration =

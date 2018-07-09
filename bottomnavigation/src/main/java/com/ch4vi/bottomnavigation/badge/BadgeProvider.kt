@@ -24,8 +24,9 @@ class BadgeProvider(private val navigation: BottomNavigation) {
 
   @Suppress("UNCHECKED_CAST")
   fun restore(bundle: Bundle) {
-    val set = bundle.getSerializable(Const.KEY_MAP) as? HashSet<Int>
-    set?.let { map.addAll(it) }
+    (bundle.getSerializable(Const.KEY_MAP) as? HashSet<Int>)?.let {
+      map.addAll(it)
+    }
   }
 
   /**
@@ -40,12 +41,12 @@ class BadgeProvider(private val navigation: BottomNavigation) {
 
   internal fun getBadge(@IdRes itemId: Int): Drawable? {
     return if (map.contains(itemId)) {
-      navigation.menu?.let { newDrawable(it.badgeColor) }
+      navigation.menu?.let { newDrawable(it.badgeColor, it.badgePosition) }
     } else null
   }
 
-  private fun newDrawable(preferredColor: Int): Drawable {
-    return BadgeDrawable(preferredColor, badgeSize)
+  private fun newDrawable(preferredColor: Int, position: Int): Drawable {
+    return BadgeDrawable(preferredColor, badgeSize, position)
   }
 
   /**

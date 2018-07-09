@@ -7,10 +7,17 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.os.SystemClock
 
-class BadgeDrawable(color: Int, private val size: Int) : Drawable() {
+class BadgeDrawable(
+  color: Int,
+  private val size: Int,
+  private val position: Int = 0
+) : Drawable() {
   private object Const {
     const val FADE_DURATION = 100f
     const val ALPHA_MAX = 255
+
+    const val TOP_RIGHT = 0
+    const val TOP_LEFT = 1
   }
 
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -46,10 +53,21 @@ class BadgeDrawable(color: Int, private val size: Int) : Drawable() {
     val bounds = bounds
     val w = bounds.width()
     val h = bounds.height()
-    canvas.drawCircle(
-        (bounds.centerX() + w / 2).toFloat(),
-        (bounds.centerY() - h / 2).toFloat(),
-        (w / 2).toFloat(), paint)
+
+    when (position) {
+      Const.TOP_LEFT -> {
+        canvas.drawCircle(
+            (bounds.centerX() - w * 2f),
+            (bounds.centerY() - h / 2f),
+            (w / 2f), paint)
+      }
+      Const.TOP_RIGHT -> {
+        canvas.drawCircle(
+            (bounds.centerX() + w / 2f),
+            (bounds.centerY() - h / 2f),
+            (w / 2f), paint)
+      }
+    }
   }
 
   override fun setAlpha(alpha: Int) {
