@@ -12,7 +12,8 @@
       android:layout_height="match_parent"
       android:layout_gravity="start"
       app:bbn_entries="@menu/bottom_menu_items"
-      app:layout_behavior="@string/bbn_tablet_view_behavior" />
+      app:layout_behavior="@string/bbn_tablet_view_behavior"
+      />
 
   <android.support.design.widget.AppBarLayout
       android:id="@+id/appBarLayout"
@@ -30,12 +31,11 @@
         />
   </android.support.design.widget.AppBarLayout>
 
-  <android.support.v4.widget.NestedScrollView
+  <include
+      layout="@layout/nested_list_layout"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="match_parent"
       android:layout_marginStart="@dimen/bbn_bottom_navigation_width"
       app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      >
-    <include layout="@layout/content_layout" />
-  </android.support.v4.widget.NestedScrollView>
+      />
 </android.support.design.widget.CoordinatorLayout>

@@ -42,11 +42,6 @@ class MainActivity : AppCompatActivity() {
 
             }
           }
-
-
-
-
-
         }
 
         override fun onMenuItemReselect(itemId: Int, position: Int, fromUser: Boolean) {
