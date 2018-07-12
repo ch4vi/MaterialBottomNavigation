@@ -57,7 +57,7 @@ class BadgeDrawable(
     when (position) {
       Const.TOP_LEFT -> {
         canvas.drawCircle(
-            (bounds.centerX() - w * 2f),
+            (bounds.centerX() - w * 2.5f),
             (bounds.centerY() - h / 2f),
             (w / 2f), paint)
       }
